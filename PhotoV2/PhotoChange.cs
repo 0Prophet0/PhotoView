@@ -400,26 +400,26 @@ namespace PhotoV2
             double w1, w2, u1temp, u2temp, u1, u2, deltaTmp, deltaMax = 0;
             int threshold = 0;
 
-            for (int i = 0; i < COLOR_SIZE_RANGE; i++)//遍历所有从0到255灰度级的阈值分割条件，测试哪一个的类间方差最大
+            for (int i = 0; i < COLOR_SIZE_RANGE; i++)//從0到255灰度级的閥值分割條件，測試哪個類間方差最大
             {
                 w1 = w2 = u1temp = u2temp = u1 = u2 = deltaTmp = 0;
                 for (int j = 0; j < COLOR_SIZE_RANGE; j++)
-                {
-                    if (j <= i)//背景
-                    {
-                        w1 += Data[0, j];
-                        u1temp += j * Data[0, j];
-                    }
-                    else//前景
-                    {
-                        w2 += Data[0, j];
-                        u2temp += j * Data[0, j];
-                    }
-                }
+                 {
+                     if (j <= i)//背景
+                     {
+                         w1 += Data[0, j];
+                         u1temp += j * Data[0, j];
+                     }
+                     else//前景
+                     {
+                         w2 += Data[0, j];
+                         u2temp += j * Data[0, j];
+                     }
+                 }
                 u1 = u1temp / w1;
                 u2 = u2temp / w2;
                 deltaTmp = w1 * w2 * Math.Pow((u1 - u2), 2); //簡化公式 g = w1 * w2 * (u1 - u2) ^ 2
-                if (deltaTmp > deltaMax)
+                if (deltaTmp > deltaMax) //判斷閥值大小
                 {
                     deltaMax = deltaTmp;
                     threshold = i;
