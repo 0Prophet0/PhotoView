@@ -314,7 +314,7 @@ namespace PhotoV2
 
         public Bitmap getBinaryThresholding(Image photo , int Value) //二值化
         {
-            bitmap = new Bitmap(photo);
+            bitmap = getGray(photo);
             int W = bitmap.Width;
             int H = bitmap.Height;
             int Max = 255, Min = 0;
