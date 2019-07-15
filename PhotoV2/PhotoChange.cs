@@ -351,11 +351,11 @@ namespace PhotoV2
 
         public Bitmap getOtsuMethod(Image photo)//歐蘇法
         {
-            bitmap = new Bitmap(photo);
+            bitmap = getGray(photo);
             int W = bitmap.Width;
             int H = bitmap.Height;
             int total = W * H;
-            double MaxR = 0, MaxG = 0, MaxB = 0;
+            double threshold = 0;
             int Max = 255, Min = 0;
 
             Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
@@ -364,18 +364,7 @@ namespace PhotoV2
             int[,] PhotoData = new int[3, COLOR_SIZE_RANGE];
             HistogramEqualizationStatistics(bitmap, ref PhotoData, rect); //統計
 
-            double[,] Scale = new double[3, COLOR_SIZE_RANGE];
-
-            for (int i = 0; i < COLOR_SIZE_RANGE; i++)//計算像素比例
-            {
-                Scale[2, i] = PhotoData[2, i] / total;
-                Scale[1, i] = PhotoData[1, i] / total;
-                Scale[0, i] = PhotoData[0, i] / total;
-            }
-
-            MaxR = Otsu(Scale, 2);
-            MaxG = Otsu(Scale, 1);
-            MaxB = Otsu(Scale, 0);
+            threshold = Otsu(PhotoData);//取得閥值
 
             //將bitmap鎖定到系統內的記憶體
             BitmapData srcBmData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
@@ -393,9 +382,9 @@ namespace PhotoV2
                 {
                     for (int j = 0; j < W; j++, srcP += 3)
                     {//red, green, blue
-                        srcP[2] = (byte)((srcP[2] > MaxR) ? Max : Min);
-                        srcP[1] = (byte)((srcP[1] > MaxG) ? Max : Min);
-                        srcP[0] = (byte)((srcP[0] > MaxB) ? Max : Min);
+                        srcP[2] = (byte)((srcP[2] > threshold) ? Max : Min);
+                        srcP[1] = (byte)((srcP[1] > threshold) ? Max : Min);
+                        srcP[0] = (byte)((srcP[0] > threshold) ? Max : Min);
                     }
                     srcP += srcOffset;
                 }
@@ -406,30 +395,30 @@ namespace PhotoV2
             return bitmap;
         }
 
-        private int Otsu(double[,] Data, int color)//計算自動閥值
+        private int Otsu(int[,] Data)//計算自動閥值
         {
-            double w0, w1, u0temp, u1temp, u0, u1, deltaTmp, deltaMax = 0;
+            double w1, w2, u1temp, u2temp, u1, u2, deltaTmp, deltaMax = 0;
             int threshold = 0;
 
             for (int i = 0; i < COLOR_SIZE_RANGE; i++)//遍历所有从0到255灰度级的阈值分割条件，测试哪一个的类间方差最大
             {
-                w0 = w1 = u0temp = u1temp = u0 = u1 = deltaTmp = 0;
+                w1 = w2 = u1temp = u2temp = u1 = u2 = deltaTmp = 0;
                 for (int j = 0; j < COLOR_SIZE_RANGE; j++)
                 {
                     if (j <= i)//背景
                     {
-                        w0 += Data[color, j];
-                        u0temp += j * Data[color, j];
+                        w1 += Data[0, j];
+                        u1temp += j * Data[0, j];
                     }
                     else//前景
                     {
-                        w1 += Data[color, j];
-                        u1temp += j * Data[color, j];
+                        w2 += Data[0, j];
+                        u2temp += j * Data[0, j];
                     }
                 }
-                u0 = u0temp / w0;
                 u1 = u1temp / w1;
-                deltaTmp = w0 * w1 * Math.Pow((u0 - u1), 2); //类间方差公式 g = w1 * w2 * (u1 - u2) ^ 2
+                u2 = u2temp / w2;
+                deltaTmp = w1 * w2 * Math.Pow((u1 - u2), 2); //簡化公式 g = w1 * w2 * (u1 - u2) ^ 2
                 if (deltaTmp > deltaMax)
                 {
                     deltaMax = deltaTmp;
