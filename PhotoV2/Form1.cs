@@ -49,6 +49,10 @@ namespace PhotoV2
                 RGB = new Bitmap[3] { new Bitmap(HistogramB.Width, HistogramB.Height), new Bitmap(HistogramG.Width, HistogramG.Height), new Bitmap(HistogramR.Width, HistogramR.Height) };
                 int[,] color = PC.getHistogram(Photo);
                 int[] MaxRGB = PC.getMixPixel(Photo);
+
+                /*canvas = Graphics.FromImage(RGB[2]);
+                canvas.DrawLine(pen, 5, 50, 5, 100);
+                HistogramR.Image = RGB[2];*/
                 ColorPainter(canvas, RGB[2], HistogramR, pen, Color.Red, MaxRGB[2], color, 2);//畫原始直方圖
                 ColorPainter(canvas, RGB[1], HistogramG, pen, Color.Green, MaxRGB[1], color, 1);
                 ColorPainter(canvas, RGB[0], HistogramB, pen, Color.Blue, MaxRGB[0], color, 0);
@@ -137,8 +141,8 @@ namespace PhotoV2
             for (int i = 0; i < 256; i++)
             {
                 double colorSize = data[num, i];
-                int Avg = (int)((colorSize / MaxValue) * 100);
-                canvas.DrawLine(pen, i, 100, i, 100 - Avg);
+                int Avg = (int)((double)(colorSize / MaxValue) * 100);
+                canvas.DrawLine(pen, i, 100 - Avg, i, 100);
                 pictureBox.Image = bitmap;
             }
         }
@@ -155,7 +159,6 @@ namespace PhotoV2
         {
             Change.Image = PC.getBinaryThresholding(Photo, C);
             HistogramDrow(PC.getBinaryThresholding(Photo, C));
-
         }
 
         private void OtsuMethodClick(object sender, EventArgs e)//歐蘇法

@@ -31,6 +31,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.檔案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveFile = new System.Windows.Forms.ToolStripMenuItem();
             this.效果ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Grayscale = new System.Windows.Forms.ToolStripMenuItem();
             this.Negative = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,6 +41,7 @@
             this.Histogram = new System.Windows.Forms.ToolStripMenuItem();
             this.BinaryThresholding = new System.Windows.Forms.ToolStripMenuItem();
             this.binaryThresholdingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OtsuMethod = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.FileName = new System.Windows.Forms.Label();
             this.SizeStr = new System.Windows.Forms.Label();
@@ -52,8 +54,6 @@
             this.HistogramR2 = new System.Windows.Forms.PictureBox();
             this.HistogramG2 = new System.Windows.Forms.PictureBox();
             this.HistogramB2 = new System.Windows.Forms.PictureBox();
-            this.OtsuMethod = new System.Windows.Forms.ToolStripMenuItem();
-            this.SaveFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NormalPhoto)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Change)).BeginInit();
@@ -91,9 +91,16 @@
             // openFile
             // 
             this.openFile.Name = "openFile";
-            this.openFile.Size = new System.Drawing.Size(224, 34);
+            this.openFile.Size = new System.Drawing.Size(196, 34);
             this.openFile.Text = "開啟檔案";
             this.openFile.Click += new System.EventHandler(this.OpenFileClick);
+            // 
+            // SaveFile
+            // 
+            this.SaveFile.Name = "SaveFile";
+            this.SaveFile.Size = new System.Drawing.Size(196, 34);
+            this.SaveFile.Text = "另存新檔";
+            this.SaveFile.Click += new System.EventHandler(this.SaveFileClick);
             // 
             // 效果ToolStripMenuItem
             // 
@@ -168,6 +175,13 @@
             this.binaryThresholdingToolStripMenuItem.Text = "Binary Thresholding";
             this.binaryThresholdingToolStripMenuItem.Click += new System.EventHandler(this.BinaryThresholdingClick);
             // 
+            // OtsuMethod
+            // 
+            this.OtsuMethod.Name = "OtsuMethod";
+            this.OtsuMethod.Size = new System.Drawing.Size(325, 34);
+            this.OtsuMethod.Text = "Otsu Method";
+            this.OtsuMethod.Click += new System.EventHandler(this.OtsuMethodClick);
+            // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -239,7 +253,7 @@
             this.HistogramR.BackColor = System.Drawing.Color.DarkGray;
             this.HistogramR.Location = new System.Drawing.Point(5, 606);
             this.HistogramR.Name = "HistogramR";
-            this.HistogramR.Size = new System.Drawing.Size(256, 100);
+            this.HistogramR.Size = new System.Drawing.Size(255, 100);
             this.HistogramR.TabIndex = 14;
             this.HistogramR.TabStop = false;
             // 
@@ -248,7 +262,7 @@
             this.HistogramG.BackColor = System.Drawing.Color.DarkGray;
             this.HistogramG.Location = new System.Drawing.Point(267, 606);
             this.HistogramG.Name = "HistogramG";
-            this.HistogramG.Size = new System.Drawing.Size(256, 100);
+            this.HistogramG.Size = new System.Drawing.Size(255, 100);
             this.HistogramG.TabIndex = 15;
             this.HistogramG.TabStop = false;
             // 
@@ -257,7 +271,7 @@
             this.HistogramB.BackColor = System.Drawing.Color.DarkGray;
             this.HistogramB.Location = new System.Drawing.Point(530, 606);
             this.HistogramB.Name = "HistogramB";
-            this.HistogramB.Size = new System.Drawing.Size(256, 100);
+            this.HistogramB.Size = new System.Drawing.Size(255, 100);
             this.HistogramB.TabIndex = 16;
             this.HistogramB.TabStop = false;
             // 
@@ -266,7 +280,7 @@
             this.HistogramR2.BackColor = System.Drawing.Color.DarkGray;
             this.HistogramR2.Location = new System.Drawing.Point(5, 712);
             this.HistogramR2.Name = "HistogramR2";
-            this.HistogramR2.Size = new System.Drawing.Size(256, 100);
+            this.HistogramR2.Size = new System.Drawing.Size(255, 100);
             this.HistogramR2.TabIndex = 22;
             this.HistogramR2.TabStop = false;
             // 
@@ -275,7 +289,7 @@
             this.HistogramG2.BackColor = System.Drawing.Color.DarkGray;
             this.HistogramG2.Location = new System.Drawing.Point(267, 712);
             this.HistogramG2.Name = "HistogramG2";
-            this.HistogramG2.Size = new System.Drawing.Size(256, 100);
+            this.HistogramG2.Size = new System.Drawing.Size(255, 100);
             this.HistogramG2.TabIndex = 23;
             this.HistogramG2.TabStop = false;
             // 
@@ -284,23 +298,9 @@
             this.HistogramB2.BackColor = System.Drawing.Color.DarkGray;
             this.HistogramB2.Location = new System.Drawing.Point(530, 712);
             this.HistogramB2.Name = "HistogramB2";
-            this.HistogramB2.Size = new System.Drawing.Size(256, 100);
+            this.HistogramB2.Size = new System.Drawing.Size(255, 100);
             this.HistogramB2.TabIndex = 24;
             this.HistogramB2.TabStop = false;
-            // 
-            // OtsuMethod
-            // 
-            this.OtsuMethod.Name = "OtsuMethod";
-            this.OtsuMethod.Size = new System.Drawing.Size(325, 34);
-            this.OtsuMethod.Text = "Otsu Method";
-            this.OtsuMethod.Click += new System.EventHandler(this.OtsuMethodClick);
-            // 
-            // SaveFile
-            // 
-            this.SaveFile.Name = "SaveFile";
-            this.SaveFile.Size = new System.Drawing.Size(224, 34);
-            this.SaveFile.Text = "另存新檔";
-            this.SaveFile.Click += new System.EventHandler(this.SaveFileClick);
             // 
             // Form1
             // 

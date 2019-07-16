@@ -397,7 +397,7 @@ namespace PhotoV2
 
         private int Otsu(int[,] Data)//計算自動閥值
         {
-            double w1, w2, u1temp, u2temp, u1, u2, deltaTmp, deltaMax = 0;
+            double w1, w2, u1temp, u2temp, u1, u2, deltaTmp, MaxValue = 0;
             int threshold = 0;
 
             for (int i = 0; i < COLOR_SIZE_RANGE; i++)//從0到255灰度级的閥值分割條件，測試哪個類間方差最大
@@ -419,9 +419,9 @@ namespace PhotoV2
                 u1 = u1temp / w1;
                 u2 = u2temp / w2;
                 deltaTmp = w1 * w2 * Math.Pow((u1 - u2), 2); //簡化公式 g = w1 * w2 * (u1 - u2) ^ 2
-                if (deltaTmp > deltaMax) //判斷閥值大小
+                if (deltaTmp > MaxValue) //判斷閥值大小
                 {
-                    deltaMax = deltaTmp;
+                    MaxValue = deltaTmp;
                     threshold = i;
                 }
             }
