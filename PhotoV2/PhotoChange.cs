@@ -397,37 +397,38 @@ namespace PhotoV2
 
         private int Otsu(int[,] Data)//計算自動閥值
         {
-            double w1, w2, u1temp, u2temp, u1, u2, deltaTmp, MaxValue = 0;
-            int threshold = 0;
+            double w0, u0, u0temp; //屬於前景的像素點數佔整幅圖像的比例記為ω0，其平均灰度μ0
+            double w1, u1, u1temp; //背景像素點數佔整幅圖像的比例為ω1，其平均灰度為μ1。
+            double g, MaxValue = 0;//類間方差記為g ， MaxValue為閥值下的最大值
+            int threshold = 0;//目前閥值T 0-255
 
             for (int i = 0; i < COLOR_SIZE_RANGE; i++)//從0到255灰度级的閥值分割條件，測試哪個類間方差最大
             {
-                w1 = w2 = u1temp = u2temp = u1 = u2 = deltaTmp = 0;
-                for (int j = 0; j < COLOR_SIZE_RANGE; j++)
-                 {
-                     if (j <= i)//背景
-                     {
-                         w1 += Data[0, j];
-                         u1temp += j * Data[0, j];
-                     }
-                     else//前景
-                     {
-                         w2 += Data[0, j];
-                         u2temp += j * Data[0, j];
-                     }
-                 }
-                u1 = u1temp / w1;
-                u2 = u2temp / w2;
-                deltaTmp = w1 * w2 * Math.Pow((u1 - u2), 2); //簡化公式 g = w1 * w2 * (u1 - u2) ^ 2
-                if (deltaTmp > MaxValue) //判斷閥值大小
+                w0 = w1 = u0temp = u1temp = u0 = u1 = g = 0;
+                for (int j = 0; j < COLOR_SIZE_RANGE; j++)//分割影像取得目前影像的閥值     //計算前景背景平均灰度
                 {
-                    MaxValue = deltaTmp;
-                    threshold = i;
+                    if (j <= i) //前景
+                    {
+                        w0 += Data[0, j];//影像像素出現個數
+                        u0temp += j * Data[0, j]; //u = ∑ i * p（i）  灰度計算 詳看Otsu pdf 9.2.1
+                    }
+                    else//背景
+                    {
+                        w1 += Data[0, j];//影像像素出現個數
+                        u1temp += j * Data[0, j]; //u = ∑ i * p（i）  灰度計算 詳看Otsu pdf 9.2.1
+                    }
+                }
+                u0 = u0temp / w0; //圖像的總平均灰度記為μ0
+                u1 = u1temp / w1; //圖像的總平均灰度記為μ1
+                g = w0 * w1 * Math.Pow((u0 - u1), 2); //簡化公式 g = w0 * w1 * (u0 - u1) ^ 2
+                if (g > MaxValue) //判斷目前閥值大小
+                {
+                    MaxValue = g;
+                    threshold = i; //取得目前閥值T
                 }
             }
 
             return threshold;
         }
-
     }
 }
