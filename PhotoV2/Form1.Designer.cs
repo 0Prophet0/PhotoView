@@ -253,52 +253,58 @@
             this.HistogramR.BackColor = System.Drawing.Color.DarkGray;
             this.HistogramR.Location = new System.Drawing.Point(5, 606);
             this.HistogramR.Name = "HistogramR";
-            this.HistogramR.Size = new System.Drawing.Size(255, 100);
+            this.HistogramR.Size = new System.Drawing.Size(160, 100);
+            this.HistogramR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.HistogramR.TabIndex = 14;
             this.HistogramR.TabStop = false;
             // 
             // HistogramG
             // 
             this.HistogramG.BackColor = System.Drawing.Color.DarkGray;
-            this.HistogramG.Location = new System.Drawing.Point(267, 606);
+            this.HistogramG.Location = new System.Drawing.Point(171, 606);
             this.HistogramG.Name = "HistogramG";
-            this.HistogramG.Size = new System.Drawing.Size(255, 100);
+            this.HistogramG.Size = new System.Drawing.Size(160, 100);
+            this.HistogramG.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.HistogramG.TabIndex = 15;
             this.HistogramG.TabStop = false;
             // 
             // HistogramB
             // 
             this.HistogramB.BackColor = System.Drawing.Color.DarkGray;
-            this.HistogramB.Location = new System.Drawing.Point(530, 606);
+            this.HistogramB.Location = new System.Drawing.Point(337, 606);
             this.HistogramB.Name = "HistogramB";
-            this.HistogramB.Size = new System.Drawing.Size(255, 100);
+            this.HistogramB.Size = new System.Drawing.Size(160, 100);
+            this.HistogramB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.HistogramB.TabIndex = 16;
             this.HistogramB.TabStop = false;
             // 
             // HistogramR2
             // 
             this.HistogramR2.BackColor = System.Drawing.Color.DarkGray;
-            this.HistogramR2.Location = new System.Drawing.Point(5, 712);
+            this.HistogramR2.Location = new System.Drawing.Point(530, 606);
             this.HistogramR2.Name = "HistogramR2";
-            this.HistogramR2.Size = new System.Drawing.Size(255, 100);
+            this.HistogramR2.Size = new System.Drawing.Size(160, 100);
+            this.HistogramR2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.HistogramR2.TabIndex = 22;
             this.HistogramR2.TabStop = false;
             // 
             // HistogramG2
             // 
             this.HistogramG2.BackColor = System.Drawing.Color.DarkGray;
-            this.HistogramG2.Location = new System.Drawing.Point(267, 712);
+            this.HistogramG2.Location = new System.Drawing.Point(696, 606);
             this.HistogramG2.Name = "HistogramG2";
-            this.HistogramG2.Size = new System.Drawing.Size(255, 100);
+            this.HistogramG2.Size = new System.Drawing.Size(160, 100);
+            this.HistogramG2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.HistogramG2.TabIndex = 23;
             this.HistogramG2.TabStop = false;
             // 
             // HistogramB2
             // 
             this.HistogramB2.BackColor = System.Drawing.Color.DarkGray;
-            this.HistogramB2.Location = new System.Drawing.Point(530, 712);
+            this.HistogramB2.Location = new System.Drawing.Point(862, 606);
             this.HistogramB2.Name = "HistogramB2";
-            this.HistogramB2.Size = new System.Drawing.Size(255, 100);
+            this.HistogramB2.Size = new System.Drawing.Size(160, 100);
+            this.HistogramB2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.HistogramB2.TabIndex = 24;
             this.HistogramB2.TabStop = false;
             // 
