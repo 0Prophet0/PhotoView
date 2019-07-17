@@ -495,7 +495,7 @@ namespace PhotoV2
             while(stop)
             {
                 w0 = w1 = u0temp = u1temp = u0 = u1 = g = 0;
-                for ( i = 0; i < COLOR_SIZE_RANGE; i++)//分割影像取得目前影像的閥值     //計算前景背景平均灰度
+                for ( i = 0; i < COLOR_SIZE_RANGE; i++)//分割影像取得目前影像的閥值    //計算前景背景平均灰度
                 {
                     if (i <= threshold) //前景
                     {
