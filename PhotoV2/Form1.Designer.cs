@@ -55,6 +55,9 @@
             this.HistogramG2 = new System.Windows.Forms.PictureBox();
             this.HistogramB2 = new System.Windows.Forms.PictureBox();
             this.IterativeMethod = new System.Windows.Forms.ToolStripMenuItem();
+            this.空間濾波ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MeanFilter = new System.Windows.Forms.ToolStripMenuItem();
+            this.MedianFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NormalPhoto)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Change)).BeginInit();
@@ -110,7 +113,8 @@
             this.Negative,
             this.transformationToolStripMenuItem,
             this.Histogram,
-            this.BinaryThresholding});
+            this.BinaryThresholding,
+            this.空間濾波ToolStripMenuItem});
             this.效果ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft JhengHei UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.效果ToolStripMenuItem.Name = "效果ToolStripMenuItem";
             this.效果ToolStripMenuItem.Size = new System.Drawing.Size(75, 34);
@@ -317,6 +321,29 @@
             this.IterativeMethod.Text = "跌代法(Iterative Method)";
             this.IterativeMethod.Click += new System.EventHandler(this.IterativeMethodClick);
             // 
+            // 空間濾波ToolStripMenuItem
+            // 
+            this.空間濾波ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MeanFilter,
+            this.MedianFilter});
+            this.空間濾波ToolStripMenuItem.Name = "空間濾波ToolStripMenuItem";
+            this.空間濾波ToolStripMenuItem.Size = new System.Drawing.Size(363, 34);
+            this.空間濾波ToolStripMenuItem.Text = "空間濾波";
+            // 
+            // MeanFilter
+            // 
+            this.MeanFilter.Name = "MeanFilter";
+            this.MeanFilter.Size = new System.Drawing.Size(224, 34);
+            this.MeanFilter.Text = "均值濾波";
+            this.MeanFilter.Click += new System.EventHandler(this.MeanFilterClick);
+            // 
+            // MedianFilter
+            // 
+            this.MedianFilter.Name = "MedianFilter";
+            this.MedianFilter.Size = new System.Drawing.Size(224, 34);
+            this.MedianFilter.Text = "中間濾波";
+            this.MedianFilter.Click += new System.EventHandler(this.MedianFilterClick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -382,6 +409,9 @@
         private System.Windows.Forms.ToolStripMenuItem OtsuMethod;
         private System.Windows.Forms.ToolStripMenuItem SaveFile;
         private System.Windows.Forms.ToolStripMenuItem IterativeMethod;
+        private System.Windows.Forms.ToolStripMenuItem 空間濾波ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MeanFilter;
+        private System.Windows.Forms.ToolStripMenuItem MedianFilter;
     }
 }
 

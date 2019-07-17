@@ -14,12 +14,14 @@ namespace PhotoV2
 {
     public partial class Form1 : Form
     {
-        PhotoChange PC = new PhotoChange();
+        PhotoChange PC;
         Image Photo;
+        Image ChPh;
         int H;
         int W;
         private static int SIZE_RANGE = 255;
 
+        Bitmap Normal = null;
         Bitmap[] RGB;//改變前的直方圖
         Bitmap[] RGBChange;//改變後的直方圖
         Pen pen = new Pen(Color.Red, 1);
@@ -41,14 +43,26 @@ namespace PhotoV2
                 FileName.Text = dialog.FileName;
                 Photo = Image.FromFile(FileName.Text);
 
-
+                
+                PC = new PhotoChange(Photo);
+                if (Normal != null)
+                {
+                    Normal.Dispose();
+                    Normal = new Bitmap(Photo);
+                }
+                else
+                {
+                    Normal = new Bitmap(Photo);
+                }
+               
                 H = Photo.Height;
                 W = Photo.Width;
                 SizeTx.Text = W + " x " + H;
                 NormalPhoto.Image = Photo; //顯示範例原始圖片
 
-                int[,] color = PC.getHistogram(Photo);
-                int[] MaxRGB = PC.getMixPixel(Photo);
+                
+                int[,] color = PC.getHistogram(Normal);
+                int[] MaxRGB = PC.getMixPixel(Normal);
                 RGB = new Bitmap[3] { new Bitmap(SIZE_RANGE, MaxRGB[0]), new Bitmap(SIZE_RANGE, MaxRGB[1]), new Bitmap(SIZE_RANGE, MaxRGB[2]) };
 
                 ColorPainter(canvas, RGB[2], HistogramR, pen, Color.Red, MaxRGB[2], color, 2);//畫原始直方圖
@@ -69,8 +83,9 @@ namespace PhotoV2
         {
             if (NormalPhoto.Image != null)
             {
-                HistogramDrow(PC.getGray(Photo));//畫改變直方圖
-                Change.Image = PC.getGray(Photo);
+                ChPh = PC.getGray();
+                HistogramDrow(ChPh);//畫改變直方圖
+                Change.Image = ChPh;
             }
         }
 
@@ -78,8 +93,9 @@ namespace PhotoV2
         {
             if (NormalPhoto.Image != null)
             {
-                HistogramDrow(PC.getNegative(Photo));
-                Change.Image = PC.getNegative(Photo);
+                ChPh = PC.getNegative();
+                HistogramDrow(ChPh);
+                Change.Image = ChPh;
             }
         }
 
@@ -94,8 +110,9 @@ namespace PhotoV2
         //接收logTransfrom    C * Log( x + 1)的資料並回傳值
         public void Receive_LogTransfromDATA(int C)
         {
-            HistogramDrow(PC.getLogarithmic1(Photo, C));
-            Change.Image = PC.getLogarithmic1(Photo, C);
+            ChPh = PC.getLogarithmic1(C);
+            HistogramDrow(ChPh);
+            Change.Image = ChPh;
         }
 
         private void PowerLowClick(object sender, EventArgs e)// power -Low
@@ -109,16 +126,18 @@ namespace PhotoV2
         //接收powerLow   的資料並回傳值
         public void Receive_PowerLowDATA(int C, double Gamma)
         {
-            HistogramDrow(PC.getLogarithmic2(Photo, C, Gamma));
-            Change.Image = PC.getLogarithmic2(Photo, C, Gamma);
+            ChPh = PC.getLogarithmic2(C, Gamma);
+            HistogramDrow(ChPh);
+            Change.Image = ChPh;
         }
 
         private void HistogramClick(object sender, EventArgs e)//直方圖均衡化
         {
             if (NormalPhoto.Image != null)
             {
-                HistogramDrow(PC.getHistogramEqualization(Photo));
-                Change.Image = PC.getHistogramEqualization(Photo);
+                ChPh = PC.getHistogramEqualization();
+                HistogramDrow(ChPh);
+                Change.Image = ChPh;
             }
         }
         private void HistogramDrow(Image ph)//繪製轉換後值方圖
@@ -135,7 +154,6 @@ namespace PhotoV2
 
         private void ColorPainter(Graphics canvas, Bitmap bitmap, PictureBox pictureBox, Pen pen, Color color, int MaxValue, int[,] data, int num)//繪製RGB直方圖
         {
-            
             pen.Color = color;
             canvas = Graphics.FromImage(bitmap);
             for (int i = 0; i < 256; i++)
@@ -155,14 +173,16 @@ namespace PhotoV2
         //接收BinaryThresholding   的資料並回傳值
         public void Receive_BinaryThresholdingDATA(int C)
         {
-            HistogramDrow(PC.getBinaryThresholding(Photo, C));
-            Change.Image = PC.getBinaryThresholding(Photo, C);
+            ChPh = PC.getBinaryThresholding(C);
+            HistogramDrow(ChPh);
+            Change.Image = ChPh;
         }
 
         private void OtsuMethodClick(object sender, EventArgs e)//歐蘇法
         {
-            HistogramDrow(PC.getOtsuMethod(Photo));
-            Change.Image = PC.getOtsuMethod(Photo);
+            ChPh = PC.getOtsuMethod();
+            HistogramDrow(ChPh);
+            Change.Image = ChPh;
         }
 
         private void SaveFileClick(object sender, EventArgs e)
@@ -210,10 +230,25 @@ namespace PhotoV2
             return bitmap;
         }
 
-        private void IterativeMethodClick(object sender, EventArgs e)
+        private void IterativeMethodClick(object sender, EventArgs e) //跌代法
         {
-            HistogramDrow(PC.getIterativeMethod(Photo));
-            Change.Image = PC.getIterativeMethod(Photo);
+            ChPh = PC.getIterativeMethod();
+            HistogramDrow(ChPh);
+            Change.Image = ChPh;
+        }
+
+        private void MeanFilterClick(object sender, EventArgs e)//均值濾波(Mean Filter)
+        {
+            ChPh = PC.getMeanFilter();
+            HistogramDrow(ChPh);
+            Change.Image = ChPh;
+        }
+
+        private void MedianFilterClick(object sender, EventArgs e)//中間濾波
+        {
+            ChPh = PC.getMedianFilter();
+            HistogramDrow(ChPh);
+            Change.Image = ChPh;
         }
     }
 }

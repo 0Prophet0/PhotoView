@@ -10,12 +10,16 @@ namespace PhotoV2
 {
     class PhotoChange
     {
-        private static Bitmap bitmap;
+        private Image photo;
         private static int COLOR_SIZE_RANGE = 256;
 
-        public Bitmap getGray(Image photo)//灰階
+        public PhotoChange(Image photo)
         {
-            bitmap = new Bitmap(photo);
+            this.photo = photo;
+        }
+        public Bitmap getGray( )//灰階
+        {
+            Bitmap bitmap = new Bitmap(photo);
             int W = bitmap.Width;
             int H = bitmap.Height;
             Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
@@ -46,9 +50,9 @@ namespace PhotoV2
 
             return bitmap;
         }
-        public Bitmap getNegative(Image photo)//負片
+        public Bitmap getNegative()//負片
         {
-            bitmap = new Bitmap(photo);
+            Bitmap bitmap = new Bitmap(photo);
             int W = bitmap.Width;
             int H = bitmap.Height;
             Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
@@ -83,10 +87,10 @@ namespace PhotoV2
 
             return bitmap;
         }
-
-        public Bitmap getLogarithmic1(Image photo ,int c)//C * Log( x + 1)
+        
+        public Bitmap getLogarithmic1(int c)//C * Log( x + 1)
         {
-            bitmap = new Bitmap(photo);
+            Bitmap bitmap = new Bitmap(photo);
             int W = bitmap.Width;
             int H = bitmap.Height;
             Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
@@ -112,7 +116,7 @@ namespace PhotoV2
                         byte blue = (byte)(c * Math.Log((srcP[0] + 1), 10));
                         srcP[2] = red;
                         srcP[1] = green;
-                        srcP[0] = blue;                        
+                        srcP[0] = blue;
                     }
                     srcP += srcOffset;
                 }
@@ -122,9 +126,9 @@ namespace PhotoV2
             return bitmap;
         }
 
-        public Bitmap getLogarithmic2(Image photo , int c, double r) // C * R的gamma次方
+        public Bitmap getLogarithmic2( int c, double r) // C * R的gamma次方
         {
-            bitmap = new Bitmap(photo);
+            Bitmap bitmap = new Bitmap(photo);
             int W = bitmap.Width;
             int H = bitmap.Height;
             Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
@@ -161,9 +165,9 @@ namespace PhotoV2
             return bitmap;
         }
         //--------------------------------------------------
-        public Bitmap getHistogramEqualization(Image photo) // 值方圖
+        public Bitmap getHistogramEqualization() // 直方圖均化
         {
-            bitmap = new Bitmap(photo);
+            Bitmap bitmap = new Bitmap(photo);
             int W = bitmap.Width;
             int H = bitmap.Height;
             int total = W * H;
@@ -267,54 +271,11 @@ namespace PhotoV2
 
             return dstBitmap;
         }
-
-
-        public int[,] getHistogram(Image photo)//取得RGB出現次數
+     
+        public Bitmap getBinaryThresholding(int Value) //二值化
         {
-            bitmap = new Bitmap(photo);
-            int W = bitmap.Width;
-            int H = bitmap.Height;
-            int total = W * H;
 
-            Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
-
-            //統計
-            int[,] PhotoData = new int[3, COLOR_SIZE_RANGE];
-            HistogramEqualizationStatistics(bitmap, ref PhotoData, rect); //統計
-
-            return PhotoData;
-        }
-
-        public int[] getMixPixel(Image photo)//取得RGB的最大值
-        {
-            bitmap = new Bitmap(photo);
-            int W = bitmap.Width;
-            int H = bitmap.Height;
-            int total = W * H;
-            int MaxR = 0, MaxG = 0, MaxB = 0;
-            Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
-
-            //統計
-            int[,] PhotoData = new int[3, COLOR_SIZE_RANGE];
-            HistogramEqualizationStatistics(bitmap, ref PhotoData, rect); //統計
-
-            for (int i = 0; i < 256; i++)
-            {//red, green, blue
-                if (PhotoData[2, i] > MaxR)
-                    MaxR = PhotoData[2, i];
-                if (PhotoData[1, i] > MaxG)
-                    MaxG = PhotoData[1, i];
-                if (PhotoData[0, i] > MaxB)
-                    MaxB = PhotoData[0, i];
-            }
-
-            int[] Max = { MaxB, MaxG, MaxR };
-            return Max;
-        }
-
-        public Bitmap getBinaryThresholding(Image photo , int Value) //二值化
-        {
-            bitmap = getGray(photo);
+            Bitmap bitmap = getGray();
             int W = bitmap.Width;
             int H = bitmap.Height;
             int Max = 255, Min = 0;
@@ -349,13 +310,12 @@ namespace PhotoV2
             return bitmap;
         }
 
-        public Bitmap getOtsuMethod(Image photo)//歐蘇法
+        public Bitmap getOtsuMethod()//歐蘇法
         {
-            bitmap = getGray(photo);
+            Bitmap bitmap = getGray();
             int W = bitmap.Width;
             int H = bitmap.Height;
-            int total = W * H;
-            double threshold = 0;
+            double threshold;
             int Max = 255, Min = 0;
 
             Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
@@ -431,12 +391,12 @@ namespace PhotoV2
             return threshold;
         }
 
-        public Bitmap getIterativeMethod(Image photo)//跌代法
+        public Bitmap getIterativeMethod()//跌代法
         {
-            bitmap = getGray(photo);
+            Bitmap bitmap = getGray();
             int W = bitmap.Width;
             int H = bitmap.Height;
-            double threshold = 0;
+            double threshold;
             int Max = 255, Min = 0;
 
             Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
@@ -492,10 +452,10 @@ namespace PhotoV2
             threshold = total / sum;
 
             bool stop = true;
-            while(stop)
+            while (stop)
             {
                 w0 = w1 = u0temp = u1temp = u0 = u1 = g = 0;
-                for ( i = 0; i < COLOR_SIZE_RANGE; i++)//分割影像取得目前影像的閥值    //計算前景背景平均灰度
+                for (i = 0; i < COLOR_SIZE_RANGE; i++)//分割影像取得目前影像的閥值    //計算前景背景平均灰度
                 {
                     if (i <= threshold) //前景
                     {
@@ -511,7 +471,7 @@ namespace PhotoV2
                 u0 = u0temp / w0; //圖像的總平均灰度記為μ0
                 u1 = u1temp / w1; //圖像的總平均灰度記為μ1
                 g = (u0 + u1) / 2;
-                if ( (g - MaxValue) < 1) //判斷目前閥值大小
+                if ((g - MaxValue) < 1) //判斷目前閥值大小
                 {
                     stop = false;
                 }
@@ -522,6 +482,238 @@ namespace PhotoV2
                 }
             }
             return threshold;
+        }
+
+        public Bitmap getMeanFilter()//均值濾波(Mean Filter)
+        {
+            Bitmap bitmap = new Bitmap(photo);
+            int W = bitmap.Width;
+            int H = bitmap.Height;
+            int[,,] PhotoData = new int[3, H, W];
+
+            Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
+
+            PhotoData = MeanFilter(rect, bitmap);
+
+
+            //將bitmap鎖定到系統內的記憶體
+            BitmapData srcBmData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+
+            //位元圖中第一個像素數據的地址。它也可以看成是位圖中的第一個掃描行
+            //目的是設兩個起始旗標srcPtr 為srcBmData 的掃描行的開始位置
+            System.IntPtr srcScan = srcBmData.Scan0;
+
+            unsafe //啟動不安全代碼
+            {
+                byte* srcP = (byte*)(void*)srcScan;
+                int srcOffset = srcBmData.Stride - W * 3;
+
+                for (int i = 0; i < H; i++)
+                {
+                    for (int j = 0; j < W; j++, srcP += 3)
+                    {//red, green, blue
+                        srcP[2] = (byte)PhotoData[2, i, j];
+                        srcP[1] = (byte)PhotoData[1, i, j];
+                        srcP[0] = (byte)PhotoData[0, i, j];
+                    }
+                    srcP += srcOffset;
+                }
+            }
+            bitmap.UnlockBits(srcBmData);
+            return bitmap;
+        }
+
+        private int[,,] MeanFilter(Rectangle rect, Bitmap bitmap)//均值濾波(Mean Filter)
+        {
+            int W = bitmap.Width;
+            int H = bitmap.Height;
+            int[,,] PhotoData = new int[3, H, W];
+            //將bitmap鎖定到系統內的記憶體
+            BitmapData srcBmData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+
+            //位元圖中第一個像素數據的地址。它也可以看成是位圖中的第一個掃描行
+            //目的是設兩個起始旗標srcPtr 為srcBmData 的掃描行的開始位置
+            System.IntPtr srcScan = srcBmData.Scan0;
+
+            unsafe //啟動不安全代碼
+            {
+                byte* srcP = (byte*)(void*)srcScan;
+                int srcOffset = srcBmData.Stride - W * 3;
+
+                for (int i = 0; i < H; i++)
+                {
+                    for (int j = 0; j < W; j++, srcP += 3)
+                    {//red, green, blue
+                        PhotoData[2, i, j] = srcP[2];
+                        PhotoData[1, i, j] = srcP[1];
+                        PhotoData[0, i, j] = srcP[0];
+                    }
+                    srcP += srcOffset;
+                }
+            }
+            bitmap.UnlockBits(srcBmData);
+
+            int Ravg, Gavg, Bavg;
+
+            for (int i = 1; i < (H - 1); i++)
+            {
+                for (int j = 1; j < (W - 1); j++)
+                {//red, green, blue
+                    Ravg = Gavg = Bavg = 0;
+                    Ravg = (PhotoData[2, i - 1, j - 1] + PhotoData[2, i - 1, j] + PhotoData[2, i - 1, j + 1] + PhotoData[2, i, j - 1] + PhotoData[2, i, j] + PhotoData[2, i, j + 1] + PhotoData[2, i + 1, j - 1] + PhotoData[2, i + 1, j] + PhotoData[2, i + 1, j + 1]) / 9;
+                    Gavg = (PhotoData[1, i - 1, j - 1] + PhotoData[1, i - 1, j] + PhotoData[1, i - 1, j + 1] + PhotoData[1, i, j - 1] + PhotoData[1, i, j] + PhotoData[1, i, j + 1] + PhotoData[1, i + 1, j - 1] + PhotoData[1, i + 1, j] + PhotoData[1, i + 1, j + 1]) / 9;
+                    Bavg = (PhotoData[0, i - 1, j - 1] + PhotoData[0, i - 1, j] + PhotoData[0, i - 1, j + 1] + PhotoData[0, i, j - 1] + PhotoData[0, i, j] + PhotoData[0, i, j + 1] + PhotoData[0, i + 1, j - 1] + PhotoData[0, i + 1, j] + PhotoData[0, i + 1, j + 1]) / 9;
+                    PhotoData[2, i, j] = Ravg;
+                    PhotoData[1, i, j] = Gavg;
+                    PhotoData[0, i, j] = Bavg;
+                }
+            }
+
+            return PhotoData;
+        }
+
+
+        public Bitmap getMedianFilter()//中值濾波(MedianFilter)
+        {
+            Bitmap bitmap = new Bitmap(photo);
+            int W = bitmap.Width;
+            int H = bitmap.Height;
+            int[,,] PhotoData = new int[3, H, W];
+
+            Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
+
+            PhotoData = MedianFilter(rect, bitmap);
+
+
+            //將bitmap鎖定到系統內的記憶體
+            BitmapData srcBmData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+
+            //位元圖中第一個像素數據的地址。它也可以看成是位圖中的第一個掃描行
+            //目的是設兩個起始旗標srcPtr 為srcBmData 的掃描行的開始位置
+            System.IntPtr srcScan = srcBmData.Scan0;
+
+            unsafe //啟動不安全代碼
+            {
+                byte* srcP = (byte*)(void*)srcScan;
+                int srcOffset = srcBmData.Stride - W * 3;
+
+                for (int i = 0; i < H; i++)
+                {
+                    for (int j = 0; j < W; j++, srcP += 3)
+                    {//red, green, blue
+                        srcP[2] = (byte)PhotoData[2, i, j];
+                        srcP[1] = (byte)PhotoData[1, i, j];
+                        srcP[0] = (byte)PhotoData[0, i, j];
+                    }
+                    srcP += srcOffset;
+                }
+            }
+            bitmap.UnlockBits(srcBmData);
+            return bitmap;
+        }
+
+        private int[,,] MedianFilter(Rectangle rect, Bitmap bitmap)//中值濾波
+        {
+            int W = bitmap.Width;
+            int H = bitmap.Height;
+            int[,,] PhotoData = new int[3, H, W];
+            //將bitmap鎖定到系統內的記憶體
+            BitmapData srcBmData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+
+            //位元圖中第一個像素數據的地址。它也可以看成是位圖中的第一個掃描行
+            //目的是設兩個起始旗標srcPtr 為srcBmData 的掃描行的開始位置
+            System.IntPtr srcScan = srcBmData.Scan0;
+
+            unsafe //啟動不安全代碼
+            {
+                byte* srcP = (byte*)(void*)srcScan;
+                int srcOffset = srcBmData.Stride - W * 3;
+
+                for (int i = 0; i < H; i++)
+                {
+                    for (int j = 0; j < W; j++, srcP += 3)
+                    {//red, green, blue
+                        PhotoData[2, i, j] = srcP[2];
+                        PhotoData[1, i, j] = srcP[1];
+                        PhotoData[0, i, j] = srcP[0];
+                    }
+                    srcP += srcOffset;
+                }
+            }
+            bitmap.UnlockBits(srcBmData);
+
+            for (int i = 1; i < (H - 1); i++)
+            {
+                for (int j = 1; j < (W - 1); j++)
+                {//red, green, blue
+
+                    PhotoData[2, i, j] = RGBMedianAdd(PhotoData, i, j, 2);
+                    PhotoData[1, i, j] = RGBMedianAdd(PhotoData, i, j, 1);
+                    PhotoData[0, i, j] = RGBMedianAdd(PhotoData, i, j, 0);
+                }
+            }
+
+            return PhotoData;
+        }
+
+        private int RGBMedianAdd(int[,,] PhotoData, int i, int j, int color)
+        {
+            List<int> RGB = new List<int>();
+            int Value;
+            RGB.Add(PhotoData[color, i - 1, j - 1]);
+            RGB.Add(PhotoData[color, i - 1, j]);
+            RGB.Add(PhotoData[color, i - 1, j + 1]);
+            RGB.Add(PhotoData[color, i, j - 1]);
+            RGB.Add(PhotoData[color, i, j]);
+            RGB.Add(PhotoData[color, i, j + 1]);
+            RGB.Add(PhotoData[color, i + 1, j - 1]);
+            RGB.Add(PhotoData[color, i + 1, j]);
+            RGB.Add(PhotoData[color, i + 1, j + 1]);
+            RGB.Sort();
+            Value = RGB[4];
+            RGB.Clear();
+            return Value;
+        }
+
+        public int[,] getHistogram(Image p)//取得RGB出現次數
+        {
+            Bitmap picture = new Bitmap(p);
+            int W = picture.Width;
+            int H = picture.Height;
+
+            Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
+
+            //統計
+            int[,] PhotoData = new int[3, COLOR_SIZE_RANGE];
+            HistogramEqualizationStatistics(picture, ref PhotoData, rect); //統計
+
+            return PhotoData;
+        }
+
+        public int[] getMixPixel(Image photo)//取得RGB的最大值
+        {
+            Bitmap picture = new Bitmap(photo);
+            int W = picture.Width;
+            int H = picture.Height;
+            int MaxR = 0, MaxG = 0, MaxB = 0;
+            Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
+
+            //統計
+            int[,] PhotoData = new int[3, COLOR_SIZE_RANGE];
+            HistogramEqualizationStatistics(picture, ref PhotoData, rect); //統計
+
+            for (int i = 0; i < 256; i++)
+            {//red, green, blue
+                if (PhotoData[2, i] > MaxR)
+                    MaxR = PhotoData[2, i];
+                if (PhotoData[1, i] > MaxG)
+                    MaxG = PhotoData[1, i];
+                if (PhotoData[0, i] > MaxB)
+                    MaxB = PhotoData[0, i];
+            }
+
+            int[] Max = { MaxB, MaxG, MaxR };
+            return Max;
         }
 
     }
