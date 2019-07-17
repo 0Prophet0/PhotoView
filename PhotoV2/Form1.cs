@@ -55,6 +55,12 @@ namespace PhotoV2
                 ColorPainter(canvas, RGB[1], HistogramG, pen, Color.Green, MaxRGB[1], color, 1);
                 ColorPainter(canvas, RGB[0], HistogramB, pen, Color.Blue, MaxRGB[0], color, 0);
 
+                if(Change.Image != null)
+                {
+                    RGBChange[2].Dispose();
+                    RGBChange[1].Dispose();
+                    RGBChange[0].Dispose();
+                }
             }
 
         }
@@ -204,5 +210,10 @@ namespace PhotoV2
             return bitmap;
         }
 
+        private void IterativeMethodClick(object sender, EventArgs e)
+        {
+            HistogramDrow(PC.getIterativeMethod(Photo));
+            Change.Image = PC.getIterativeMethod(Photo);
+        }
     }
 }

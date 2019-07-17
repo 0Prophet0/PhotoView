@@ -54,6 +54,7 @@
             this.HistogramR2 = new System.Windows.Forms.PictureBox();
             this.HistogramG2 = new System.Windows.Forms.PictureBox();
             this.HistogramB2 = new System.Windows.Forms.PictureBox();
+            this.IterativeMethod = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NormalPhoto)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Change)).BeginInit();
@@ -163,7 +164,8 @@
             // 
             this.BinaryThresholding.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.binaryThresholdingToolStripMenuItem,
-            this.OtsuMethod});
+            this.OtsuMethod,
+            this.IterativeMethod});
             this.BinaryThresholding.Name = "BinaryThresholding";
             this.BinaryThresholding.Size = new System.Drawing.Size(363, 34);
             this.BinaryThresholding.Text = "二值化";
@@ -171,14 +173,14 @@
             // binaryThresholdingToolStripMenuItem
             // 
             this.binaryThresholdingToolStripMenuItem.Name = "binaryThresholdingToolStripMenuItem";
-            this.binaryThresholdingToolStripMenuItem.Size = new System.Drawing.Size(325, 34);
+            this.binaryThresholdingToolStripMenuItem.Size = new System.Drawing.Size(378, 34);
             this.binaryThresholdingToolStripMenuItem.Text = "Binary Thresholding";
             this.binaryThresholdingToolStripMenuItem.Click += new System.EventHandler(this.BinaryThresholdingClick);
             // 
             // OtsuMethod
             // 
             this.OtsuMethod.Name = "OtsuMethod";
-            this.OtsuMethod.Size = new System.Drawing.Size(325, 34);
+            this.OtsuMethod.Size = new System.Drawing.Size(378, 34);
             this.OtsuMethod.Text = "Otsu Method";
             this.OtsuMethod.Click += new System.EventHandler(this.OtsuMethodClick);
             // 
@@ -308,6 +310,13 @@
             this.HistogramB2.TabIndex = 24;
             this.HistogramB2.TabStop = false;
             // 
+            // IterativeMethod
+            // 
+            this.IterativeMethod.Name = "IterativeMethod";
+            this.IterativeMethod.Size = new System.Drawing.Size(378, 34);
+            this.IterativeMethod.Text = "跌代法(Iterative Method)";
+            this.IterativeMethod.Click += new System.EventHandler(this.IterativeMethodClick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -372,6 +381,7 @@
         private System.Windows.Forms.ToolStripMenuItem binaryThresholdingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OtsuMethod;
         private System.Windows.Forms.ToolStripMenuItem SaveFile;
+        private System.Windows.Forms.ToolStripMenuItem IterativeMethod;
     }
 }
 
