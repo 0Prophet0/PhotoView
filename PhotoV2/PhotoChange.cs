@@ -574,9 +574,9 @@ namespace PhotoV2
         {
             int frameH = posH + (Size - 1), frameW = posW + (Size - 1);
             int RGB = 0;
-            if (frameH >= H)
+            if (frameH > H)
                 frameH = H;
-            if (frameW >= W)
+            if (frameW > W)
                 frameW = W;
             for (int i = posH - 1; i < frameH; i++)
             {
@@ -670,7 +670,7 @@ namespace PhotoV2
 
             return PhotoData;
         }
-        private int RGBMedianAdd(int[,,] PhotoData, int H, int W, int posH, int posW, int Size, int Color)//均值濾波計算
+        private int RGBMedianAdd(int[,,] PhotoData, int H, int W, int posH, int posW, int Size, int Color)//中值濾波計算
         {
             int frameH = posH + (Size - 1), frameW = posW + (Size - 1);
             List<int> RGB = new List<int>();
