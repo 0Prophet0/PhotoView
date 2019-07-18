@@ -567,11 +567,10 @@ namespace PhotoV2
                     PhotoData[0, i, j] = Bavg;
                 }
             }
-
             return PhotoData;
         }
 
-        private int MeanFilterFinll(int[,,] PhotoData, int H, int W, int posH, int posW, int Size,int Color)
+        private int MeanFilterFinll(int[,,] PhotoData, int H, int W, int posH, int posW, int Size,int Color)//均值濾波計算
         {
             int frameH = posH + (Size - 1), frameW = posW + (Size - 1);
             int RGB = 0;
