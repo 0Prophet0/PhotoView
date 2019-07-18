@@ -484,7 +484,7 @@ namespace PhotoV2
             return threshold;
         }
 
-        public Bitmap getMeanFilter()//均值濾波(Mean Filter)
+        public Bitmap getMeanFilter(int Size)//均值濾波(Mean Filter)
         {
             Bitmap bitmap = new Bitmap(photo);
             int W = bitmap.Width;
@@ -493,8 +493,7 @@ namespace PhotoV2
 
             Rectangle rect = new Rectangle(0, 0, W, H);//放置圖片空間大小
 
-            PhotoData = MeanFilter(rect, bitmap);
-
+            PhotoData = MeanFilter(rect, bitmap, Size);
 
             //將bitmap鎖定到系統內的記憶體
             BitmapData srcBmData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
@@ -523,7 +522,7 @@ namespace PhotoV2
             return bitmap;
         }
 
-        private int[,,] MeanFilter(Rectangle rect, Bitmap bitmap)//均值濾波(Mean Filter)
+        private int[,,] MeanFilter(Rectangle rect, Bitmap bitmap , int Size)//均值濾波(Mean Filter)
         {
             int W = bitmap.Width;
             int H = bitmap.Height;
@@ -560,9 +559,9 @@ namespace PhotoV2
                 for (int j = 1; j < (W - 1); j++)
                 {//red, green, blue
                     Ravg = Gavg = Bavg = 0;
-                    Ravg = (PhotoData[2, i - 1, j - 1] + PhotoData[2, i - 1, j] + PhotoData[2, i - 1, j + 1] + PhotoData[2, i, j - 1] + PhotoData[2, i, j] + PhotoData[2, i, j + 1] + PhotoData[2, i + 1, j - 1] + PhotoData[2, i + 1, j] + PhotoData[2, i + 1, j + 1]) / 9;
-                    Gavg = (PhotoData[1, i - 1, j - 1] + PhotoData[1, i - 1, j] + PhotoData[1, i - 1, j + 1] + PhotoData[1, i, j - 1] + PhotoData[1, i, j] + PhotoData[1, i, j + 1] + PhotoData[1, i + 1, j - 1] + PhotoData[1, i + 1, j] + PhotoData[1, i + 1, j + 1]) / 9;
-                    Bavg = (PhotoData[0, i - 1, j - 1] + PhotoData[0, i - 1, j] + PhotoData[0, i - 1, j + 1] + PhotoData[0, i, j - 1] + PhotoData[0, i, j] + PhotoData[0, i, j + 1] + PhotoData[0, i + 1, j - 1] + PhotoData[0, i + 1, j] + PhotoData[0, i + 1, j + 1]) / 9;
+                    Ravg = MeanFilterFinll(PhotoData, H - 1, W - 1, i, j, Size, 2);
+                    Gavg = MeanFilterFinll(PhotoData, H - 1, W - 1, i, j, Size, 1);
+                    Bavg = MeanFilterFinll(PhotoData, H - 1, W - 1, i, j, Size, 0);
                     PhotoData[2, i, j] = Ravg;
                     PhotoData[1, i, j] = Gavg;
                     PhotoData[0, i, j] = Bavg;
@@ -572,7 +571,24 @@ namespace PhotoV2
             return PhotoData;
         }
 
+        private int MeanFilterFinll(int[,,] PhotoData, int H, int W, int posH, int posW, int Size,int Color)
+        {
+            int frameH = posH + (Size - 1), frameW = posW + (Size - 1);
+            int RGB = 0;
+            if (frameH >= H)
+                frameH = H;
+            if (frameW >= W)
+                frameW = W;
+            for (int i = posH - 1; i < frameH; i++)
+            {
+                for (int j = posW - 1; j < frameW; j++)
+                {
+                    RGB+= PhotoData[Color, i, j];
+                }
+            }
 
+            return RGB / (Size * Size);
+        }
         public Bitmap getMedianFilter()//中值濾波(MedianFilter)
         {
             Bitmap bitmap = new Bitmap(photo);

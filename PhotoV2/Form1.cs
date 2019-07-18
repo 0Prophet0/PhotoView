@@ -239,7 +239,7 @@ namespace PhotoV2
 
         private void MeanFilterClick(object sender, EventArgs e)//均值濾波(Mean Filter)
         {
-            ChPh = PC.getMeanFilter();
+            ChPh = PC.getMeanFilter(3);
             HistogramDrow(ChPh);
             Change.Image = ChPh;
         }
