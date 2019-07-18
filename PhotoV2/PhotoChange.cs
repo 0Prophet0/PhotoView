@@ -662,34 +662,31 @@ namespace PhotoV2
                 for (int j = 1; j < (W - 1); j++)
                 {//red, green, blue
 
-                    PhotoData[2, i, j] = RGBMedianAdd(PhotoData, i, j, 2);
-                    PhotoData[1, i, j] = RGBMedianAdd(PhotoData, i, j, 1);
-                    PhotoData[0, i, j] = RGBMedianAdd(PhotoData, i, j, 0);
+                    PhotoData[2, i, j] = RGBMedianAdd(PhotoData, H - 1, W - 1, i, j, 3, 2);
+                    PhotoData[1, i, j] = RGBMedianAdd(PhotoData, H - 1, W - 1, i, j, 3, 1);
+                    PhotoData[0, i, j] = RGBMedianAdd(PhotoData, H - 1, W - 1, i, j, 3, 0);
                 }
             }
 
             return PhotoData;
         }
-
-        private int RGBMedianAdd(int[,,] PhotoData, int i, int j, int color)
+        private int RGBMedianAdd(int[,,] PhotoData, int H, int W, int posH, int posW, int Size, int Color)//均值濾波計算
         {
+            int frameH = posH + (Size - 1), frameW = posW + (Size - 1);
             List<int> RGB = new List<int>();
             int Value;
-            RGB.Add(PhotoData[color, i - 1, j - 1]);
-            RGB.Add(PhotoData[color, i - 1, j]);
-            RGB.Add(PhotoData[color, i - 1, j + 1]);
-            RGB.Add(PhotoData[color, i, j - 1]);
-            RGB.Add(PhotoData[color, i, j]);
-            RGB.Add(PhotoData[color, i, j + 1]);
-            RGB.Add(PhotoData[color, i + 1, j - 1]);
-            RGB.Add(PhotoData[color, i + 1, j]);
-            RGB.Add(PhotoData[color, i + 1, j + 1]);
+            for (int i = posH - 1; i < frameH; i++)
+            {
+                for (int j = posW - 1; j < frameW; j++)
+                {
+                    RGB.Add(PhotoData[Color, i, j]);
+                }
+            }
             RGB.Sort();
             Value = RGB[4];
             RGB.Clear();
             return Value;
         }
-
         public int[,] getHistogram(Image p)//取得RGB出現次數
         {
             Bitmap picture = new Bitmap(p);
